@@ -10,13 +10,4 @@ subprojects {
                     targetCompatibility JavaVersion.VERSION_11
                 }
             }
-        }
-    }
-    project.plugins.withId("kotlin-android") {
-        project.tasks.configureEach { task ->
-            if (task.name.startsWith("compile") && task.name.endsWith("Kotlin")) {
-                task.kotlinOptions.jvmTarget = "11"
-            }
-        }
-    }
 }
