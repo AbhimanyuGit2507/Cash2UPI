@@ -13,9 +13,9 @@ subprojects {
         }
     }
     project.plugins.withId("kotlin-android") {
-        project.tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
-            kotlinOptions {
-                jvmTarget = "11"
+        project.tasks.configureEach { task ->
+            if (task.name.startsWith("compile") && task.name.endsWith("Kotlin")) {
+                task.kotlinOptions.jvmTarget = "11"
             }
         }
     }
