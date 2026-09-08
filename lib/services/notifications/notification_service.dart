@@ -33,7 +33,7 @@ class NotificationService {
     await _flutterLocalNotificationsPlugin.show(
       0,
       'New Transaction Detected',
-      '₹\$amount from \$bank',
+      '₹$amount from $bank',
       platformChannelSpecifics,
       payload: smsId,
     );

@@ -14,7 +14,7 @@ class AuthService {
     try {
       return await _googleSignIn.signIn();
     } catch (error) {
-      print('Sign in failed: \$error');
+      print('Sign in failed: $error');
       return null;
     }
   }

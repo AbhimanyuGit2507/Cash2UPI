@@ -22,7 +22,7 @@ class GroqProvider extends AIProvider {
     final response = await http.post(
       Uri.parse('https://api.groq.com/openai/v1/chat/completions'),
       headers: {
-        'Authorization': 'Bearer \$apiKey',
+        'Authorization': 'Bearer $apiKey',
         'Content-Type': 'application/json',
       },
       body: jsonEncode({
@@ -48,7 +48,7 @@ class GroqProvider extends AIProvider {
       'POST',
       Uri.parse('https://api.groq.com/openai/v1/audio/transcriptions'),
     );
-    request.headers['Authorization'] = 'Bearer \$apiKey';
+    request.headers['Authorization'] = 'Bearer $apiKey';
     request.fields['model'] = 'whisper-large-v3';
     request.files.add(await http.MultipartFile.fromPath('file', filePath));
 
@@ -68,7 +68,7 @@ class MistralProvider extends AIProvider {
     final response = await http.post(
       Uri.parse('https://api.mistral.ai/v1/chat/completions'),
       headers: {
-        'Authorization': 'Bearer \$apiKey',
+        'Authorization': 'Bearer $apiKey',
         'Content-Type': 'application/json',
       },
       body: jsonEncode({
@@ -96,7 +96,7 @@ class CerebrasProvider extends AIProvider {
     final response = await http.post(
       Uri.parse('https://api.cerebras.ai/v1/chat/completions'),
       headers: {
-        'Authorization': 'Bearer \$apiKey',
+        'Authorization': 'Bearer $apiKey',
         'Content-Type': 'application/json',
       },
       body: jsonEncode({
@@ -133,7 +133,7 @@ class AIOrchestrator {
         return await groq.parseVoiceCommand(command, groqKey);
       }
     } catch (e) {
-      print('Groq failed: \$e');
+      print('Groq failed: $e');
     }
 
     try {
@@ -141,7 +141,7 @@ class AIOrchestrator {
         return await mistral.parseVoiceCommand(command, mistralKey);
       }
     } catch (e) {
-      print('Mistral failed: \$e');
+      print('Mistral failed: $e');
     }
 
     try {
@@ -149,7 +149,7 @@ class AIOrchestrator {
         return await cerebras.parseVoiceCommand(command, cerebrasKey);
       }
     } catch (e) {
-      print('Cerebras failed: \$e');
+      print('Cerebras failed: $e');
     }
 
     throw Exception('All AI providers failed or no keys provided');
@@ -166,7 +166,7 @@ class GoogleSttProvider {
     altLangs.remove(langCode);
 
     final response = await http.post(
-      Uri.parse('https://speech.googleapis.com/v1/speech:recognize?key=\$apiKey'),
+      Uri.parse('https://speech.googleapis.com/v1/speech:recognize?key=$apiKey'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         'config': {
@@ -188,6 +188,6 @@ class GoogleSttProvider {
       }
       return '';
     }
-    throw Exception('Google Cloud STT API failed: \${response.body}');
+    throw Exception('Google Cloud STT API failed: ${response.body}');
   }
 }

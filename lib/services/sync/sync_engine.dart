@@ -29,7 +29,7 @@ class SyncEngine {
       }
       return true;
     } catch (e) {
-      print('Sync error: \$e');
+      print('Sync error: $e');
       return false;
     }
   }

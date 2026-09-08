@@ -1,6 +1,5 @@
 import '../../domain/entities/sms_message.dart';
 import '../datasources/local/sms_dao.dart';
-import 'package:uuid/uuid.dart';
 
 class SmsRepository {
   final SmsDao _dao;
@@ -9,7 +8,7 @@ class SmsRepository {
 
   Future<void> addSms(String sender, String body, int timestamp) async {
     final sms = SmsMessageEntity(
-      id: const Uuid().v4(),
+      id: DateTime.now().millisecondsSinceEpoch.toString(),
       sender: sender,
       body: body,
       timestamp: timestamp,

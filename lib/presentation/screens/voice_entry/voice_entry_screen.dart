@@ -3,7 +3,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:record/record.dart';
 import 'package:speech_to_text/speech_to_text.dart' as stt;
 import 'package:path_provider/path_provider.dart';
-import 'dart:io';
 import '../../../core/providers/app_providers.dart';
 import '../../../domain/entities/transaction.dart';
 import '../../../services/ai/ai_providers.dart';
@@ -60,7 +59,7 @@ class _VoiceEntryScreenState extends ConsumerState<VoiceEntryScreen> {
     if (_activeSttEngine == 'groq' || _activeSttEngine == 'google') {
       if (await _audioRecorder.hasPermission()) {
         final dir = await getTemporaryDirectory();
-        final path = '\${dir.path}/recording.wav';
+        final path = '${dir.path}/recording.wav';
         await _audioRecorder.start(
           const RecordConfig(
             encoder: AudioEncoder.pcm16bits,
@@ -72,8 +71,8 @@ class _VoiceEntryScreenState extends ConsumerState<VoiceEntryScreen> {
       }
     } else {
       bool available = await _speech.initialize(
-        onStatus: (val) => print('onStatus: \$val'),
-        onError: (val) => print('onError: \$val'),
+        onStatus: (val) => print('onStatus: $val'),
+        onError: (val) => print('onError: $val'),
       );
       if (available) {
         _speech.listen(
@@ -221,7 +220,7 @@ class _VoiceEntryScreenState extends ConsumerState<VoiceEntryScreen> {
       }
     } catch (e) {
       setState(() {
-        _text = 'Parsing Error: \$e';
+        _text = 'Parsing Error: $e';
         _isProcessing = false;
       });
     }
@@ -242,7 +241,7 @@ class _VoiceEntryScreenState extends ConsumerState<VoiceEntryScreen> {
               else if (_activeSttEngine == 'google')
                 const Chip(label: Text('Google Cloud STT Engine'), backgroundColor: Colors.greenAccent)
               else
-                Chip(label: Text('Native Engine (\$_nativeSttLanguage)'), backgroundColor: Colors.blue[100]),
+                Chip(label: Text('Native Engine ($_nativeSttLanguage)'), backgroundColor: Colors.blue[100]),
               const SizedBox(height: 20),
               _isProcessing 
                   ? const CircularProgressIndicator()

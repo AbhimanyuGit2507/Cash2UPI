@@ -44,7 +44,7 @@ void backgroundMessageHandler(SmsMessage message) async {
       await txRepo.addTransaction(tx);
     }
   } catch (e) {
-    print('SMS Background processing failed: \$e');
+    print('SMS Background processing failed: $e');
   }
 }
 
@@ -61,7 +61,7 @@ void callbackDispatcher() {
       final syncEngine = SyncEngine(txRepo, url);
       await syncEngine.syncPendingTransactions();
     } catch (e) {
-      print('Background sync failed: \$e');
+      print('Background sync failed: $e');
     }
     return Future.value(true);
   });

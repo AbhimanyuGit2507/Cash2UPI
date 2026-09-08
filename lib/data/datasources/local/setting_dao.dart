@@ -18,4 +18,8 @@ class SettingDao {
     }
     return null;
   }
+
+  Future<void> saveSetting(String key, String value) async {
+    await insertOrUpdate(AppSettingEntity(key: key, value: value));
+  }
 }
