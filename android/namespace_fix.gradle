@@ -10,4 +10,6 @@ subprojects {
                     targetCompatibility JavaVersion.VERSION_11
                 }
             }
+        }
+    }
 }
