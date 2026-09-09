@@ -7,11 +7,43 @@ import '../settings/settings_screen.dart';
 import '../../../core/providers/app_providers.dart';
 import '../../../services/sync/sync_engine.dart';
 
-class HomeScreen extends ConsumerWidget {
+import 'package:telephony/telephony.dart';
+
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends ConsumerState<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    _initPermissionsAndListener();
+  }
+
+  Future<void> _initPermissionsAndListener() async {
+    try {
+      final telephony = Telephony.instance;
+      final granted = await telephony.requestPhoneAndSmsPermissions;
+      
+      if (granted == true) {
+        // Safe to listen now
+        telephony.listenIncomingSms(
+          onNewMessage: (SmsMessage message) {
+            // We can handle foreground messages here if needed or let background handler do it
+          },
+          onBackgroundMessage: null, // Usually handled by main.dart, but we can re-register if needed
+        );
+      }
+    } catch (e) {
+      debugPrint('Error requesting permissions: $e');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Cash2UPI Ledger'),

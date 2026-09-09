@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:workmanager/workmanager.dart';
@@ -68,30 +69,58 @@ void callbackDispatcher() {
 }
 
 void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  
-  await DatabaseHelper().database;
-  await NotificationService().init();
-  
-  Workmanager().initialize(
-    callbackDispatcher,
-  );
-  
-  Workmanager().registerPeriodicTask(
-    "1",
-    "syncTask",
-    frequency: const Duration(minutes: 15),
-  );
-  
-  final telephony = Telephony.instance;
-  telephony.listenIncomingSms(
-    onNewMessage: (SmsMessage message) {
-      backgroundMessageHandler(message);
-    },
-    onBackgroundMessage: backgroundMessageHandler,
-  );
-  
-  runApp(const ProviderScope(child: Cash2UpiApp()));
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    
+    // Add global error handler for Flutter errors
+    FlutterError.onError = (FlutterErrorDetails details) {
+      debugPrint('Flutter Error: ${details.exception}');
+      // You can add more complex logging here if needed
+    };
+    
+    try {
+      await DatabaseHelper().database;
+    } catch (e) {
+      debugPrint('Database initialization failed: $e');
+    }
+
+    try {
+      await NotificationService().init();
+    } catch (e) {
+      debugPrint('Notification Service initialization failed: $e');
+    }
+    
+    try {
+      Workmanager().initialize(
+        callbackDispatcher,
+      );
+      Workmanager().registerPeriodicTask(
+        "1",
+        "syncTask",
+        frequency: const Duration(minutes: 15),
+      );
+    } catch (e) {
+      debugPrint('Workmanager initialization failed: $e');
+    }
+    
+    try {
+      final telephony = Telephony.instance;
+      // We wrap this in a try-catch because if SMS permissions are not granted,
+      // listenIncomingSms will throw an exception and crash the app on startup.
+      telephony.listenIncomingSms(
+        onNewMessage: (SmsMessage message) {
+          backgroundMessageHandler(message);
+        },
+        onBackgroundMessage: backgroundMessageHandler,
+      );
+    } catch (e) {
+      debugPrint('Telephony listener initialization failed (likely missing permissions): $e');
+    }
+    
+    runApp(const ProviderScope(child: Cash2UpiApp()));
+  }, (error, stackTrace) {
+    debugPrint('Zoned Guarded Error: $error');
+  });
 }
 
 class Cash2UpiApp extends StatelessWidget {
