@@ -75,7 +75,6 @@ void main() async {
   
   Workmanager().initialize(
     callbackDispatcher,
-    isInDebugMode: true
   );
   
   Workmanager().registerPeriodicTask(
