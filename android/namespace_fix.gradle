@@ -2,9 +2,9 @@ subprojects {
     // Inject mock flutter property for plugins that evaluate too early or miss it
     if (project.name != 'app' && !project.hasProperty('flutter')) {
         project.ext.flutter = [
-            compileSdkVersion: 34,
+            compileSdkVersion: 35,
             minSdkVersion: 24,
-            targetSdkVersion: 34,
+            targetSdkVersion: 35,
             ndkVersion: "25.1.8937393"
         ]
     }
